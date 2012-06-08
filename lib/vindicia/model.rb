@@ -32,7 +32,7 @@ module Vindicia
       def namespace(uri)
         client.wsdl.namespace = uri
       end
-
+      
       # Accepts one or more SOAP actions and generates both class and instance methods named
       # after the given actions. Each generated method accepts an optional SOAP body Hash and
       # a block to be passed to <tt>Savon::Client#request</tt> and executes a SOAP request.
@@ -45,11 +45,14 @@ module Vindicia
     private
     
       def define_class_action(action)
+        # Some action names are reserved by Ruby...use map to translate them to desired action names
+        real_action = API_ACTION_NAME_RESERVED_BY_RUBY_MAPS[action] || action
+        
         class_action_module.module_eval <<-CODE
           def #{action.to_s.snakecase}(body = {}, &block)
-            client.request :tns, #{action.inspect} do
+            client.request :tns, #{real_action.inspect} do
               soap.namespaces["xmlns:tns"] = vindicia_target_namespace
-              http.headers["SOAPAction"] = vindicia_soap_action('#{action}')
+              http.headers["SOAPAction"] = vindicia_soap_action('#{real_action}')
               soap.body = {
                 :auth => vindicia_auth_credentials
               }.merge(body)

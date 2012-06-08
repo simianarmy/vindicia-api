@@ -19,6 +19,14 @@ class Vindicia::ConfigTest < Test::Unit::TestCase
     Vindicia.clear_config
     Vindicia::Configuration.reset_instance
   end
+  
+  def set_config_values(config)
+    config.login = 'your_login'
+    config.password = 'your_password' 
+    config.endpoint = 'https://soap.prodtest.sj.vindicia.com/soap.pl'
+    config.namespace = 'http://soap.vindicia.com'
+    config.hoa_post_endpoint = 'https://secure.prodtest.sj.vindicia.com/vws'
+  end
 
   def test_should_not_configure_on_upsupported_api_version
     assert !Vindicia.config.is_configured?
@@ -29,10 +37,7 @@ class Vindicia::ConfigTest < Test::Unit::TestCase
     assert_nothing_raised do
       Vindicia.configure do |config|
         config.api_version = bad_api_version
-        config.login = 'your_login'
-        config.password = 'your_password' 
-        config.endpoint = 'https://soap.prodtest.sj.vindicia.com/soap.pl'
-        config.namespace = 'http://soap.vindicia.com'
+        set_config_values(config)
       end
     end
 
@@ -47,10 +52,7 @@ class Vindicia::ConfigTest < Test::Unit::TestCase
     assert_nothing_raised do
       Vindicia.configure do |config|
         config.api_version = good_api_version
-        config.login = 'your_login'
-        config.password = 'your_password' 
-        config.endpoint = 'https://soap.prodtest.sj.vindicia.com/soap.pl'
-        config.namespace = 'http://soap.vindicia.com'
+        set_config_values(config)
       end
     end
 
@@ -62,10 +64,7 @@ class Vindicia::ConfigTest < Test::Unit::TestCase
     assert_raise RuntimeError do
       Vindicia.configure do |config|
         config.api_version = good_api_version
-        config.login = 'your_login'
-        config.password = 'your_password'
-        config.endpoint = 'https://soap.prodtest.sj.vindicia.com/soap.pl'
-        config.namespace = 'http://soap.vindicia.com'
+        set_config_values(config)
       end
     end
   end
@@ -78,10 +77,7 @@ class Vindicia::ConfigTest < Test::Unit::TestCase
     assert_nothing_raised do
       Vindicia.configure do |config|
         config.api_version = good_api_version
-        config.login = 'your_login'
-        config.password = 'your_password' 
-        config.endpoint = 'https://soap.prodtest.sj.vindicia.com/soap.pl'
-        config.namespace = 'http://soap.vindicia.com'
+        set_config_values(config)
       end
     end
 

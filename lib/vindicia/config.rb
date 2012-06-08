@@ -50,15 +50,18 @@ module Vindicia
       :symantec=>[:add_auto_bill_item, :cancel_auto_bill, :cancel_pending_ar_txns, :delay_bill, :dispute_bill, :refund_ab_txns, :update_abs_account, :update_ab_product, :update_bp, :update_bp_and_catch_up_billing, :validate_bp, :fetch_b_ps_by_customer_guid, :lookup_transaction, :disable_billing_profile, :fetch_captured_transactions, :report_order_exception],
       :token=>[:update, :fetch],
       :transaction=>[:fetch_by_vid, :fetch_by_web_session_vid, :fetch_by_account, :fetch_by_merchant_transaction_id, :fetch_delta_since, :fetch_delta, :fetch_by_autobill, :fetch_search_page, :fetch_by_payment_method, :auth, :calculate_sales_tax, :capture, :cancel, :auth_capture, :report, :score, :finalize_pay_pal_auth],
-#      :web_session=>[:initialize, :finalize, :fetch_by_vid] # initialize is a ruby reserved word. need to refactor to get this one to work =( @TQ
-      :web_session=>[:finalize, :fetch_by_vid]
+      :web_session=>[:init, :finalize, :fetch_by_vid]
     }
+  }
+  # initialize is a ruby reserved word. map alias to real soap action name as workaround
+  API_ACTION_NAME_RESERVED_BY_RUBY_MAPS = {
+    :init => :initialize
   }
 
   class Configuration
     include Singleton
     
-    attr_accessor :api_version, :login, :password, :endpoint, :namespace
+    attr_accessor :api_version, :login, :password, :endpoint, :namespace, :hoa_post_endpoint
 
     def initialize
       @@configured = false      
